@@ -4,6 +4,8 @@ import { Icon, Rating } from "react-native-elements";
 import { Button } from "react-native-elements/dist/buttons/Button";
 import { Image } from "react-native-elements/dist/image/Image";
 import { COVERS_PATH, IMAGES_PATH } from "../../helpers/constants";
+import { addFavoriteAction } from "../redux/actions";
+import store from "../redux/store";
 
 
 
@@ -12,9 +14,7 @@ import { COVERS_PATH, IMAGES_PATH } from "../../helpers/constants";
 
 export const MovieDetailsScreen = (props)=>{
 
-  const {popularity,poster_path,overview,vote_average,original_title} = props.route.params.movieData.item;
-  console.log("**********************************");
-  console.log(props.route.params);
+  const {poster_path,overview,vote_average,original_title} = props.route.params.movieData.item;
   const imageUri = IMAGES_PATH + poster_path;
 
   return(
@@ -55,7 +55,7 @@ export const MovieDetailsScreen = (props)=>{
         }
         iconContainerStyle={{ background: "#000" }}
         loadingStyle={{}}
-        onPress={() => alert("click")}
+        onPress={() => store.dispatch(addFavoriteAction(props.route.params.movieData.item))}
         title="Add To Favorits"
         titleProps={{}}
         titleStyle={{ marginHorizontal: 5, color:"#ffb049" }}

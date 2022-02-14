@@ -1,5 +1,6 @@
 import React, { useState }  from "react";
 import { FlatList, Button, Text, TouchableOpacity, StyleSheet, View, ScrollView } from "react-native";
+import { useSelector } from "react-redux";
 import theMovieDb from "../../helpers/themoviedb-lib/themoviedb";
 import { MovieItem } from "../components/MovieItem";
 
@@ -7,15 +8,14 @@ import { MovieItem } from "../components/MovieItem";
 
 const MoviesListScreen = ({navigation})=>{
 
+  const favorites = useSelector(state => state);
+
   const [moviesData, setMoviesData] = useState({movies:[], success:true, error:false});
   const getMovies = ()=> {
-    console.log('function called yes its been called');
     theMovieDb.movies.getPopular({},
       (movies)=> {
-        console.log(movies);
         movies = JSON.parse(movies)
         if (movies.results && movies.results.length > 0) {
-    console.log('accessible movies');
           setMoviesData({
             page: movies.page,
             movies: movies.results,
@@ -53,7 +53,7 @@ const MoviesListScreen = ({navigation})=>{
   }
   return (
     <View style={styles.movieListContainer}>
-      <Text style={styles.screenTitle}>Popular movies </Text>
+      {/* <Text style={styles.screenTitle}>Popular movies</Text> */}
       <FlatList
         data={moviesData.movies}
         renderItem={(movie) => (
@@ -78,6 +78,7 @@ const styles =StyleSheet.create({
   },
   movieListContainer:{
     backgroundColor:'#05131e',
+    paddingTop:75,
     paddingBottom:25
   },
   buttonContainer:{

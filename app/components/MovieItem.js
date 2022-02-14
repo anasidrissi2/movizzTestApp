@@ -10,8 +10,6 @@ export const MovieItem = (props)=>{
   const {navigation} = props;
   // const movie = movieData;
   const imageUri = IMAGES_PATH + item.poster_path;
-  console.log(item);
-  console.log(imageUri);
   return (
     
       <View
