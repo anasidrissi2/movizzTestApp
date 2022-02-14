@@ -1,6 +1,7 @@
 import React from "react"
-import { Button, ImageBackground, StyleSheet, Text, View } from "react-native"
+import { ImageBackground, ScrollView, StyleSheet, Text, View } from "react-native"
 import { Icon, Rating } from "react-native-elements";
+import { Button } from "react-native-elements/dist/buttons/Button";
 import { Image } from "react-native-elements/dist/image/Image";
 import { COVERS_PATH, IMAGES_PATH } from "../../helpers/constants";
 
@@ -17,7 +18,7 @@ export const MovieDetailsScreen = (props)=>{
   const imageUri = IMAGES_PATH + poster_path;
 
   return(
-    <View style={styles.MovieDetailsContainer}>
+    <ScrollView style={styles.MovieDetailsContainer}>
       <ImageBackground
           resizeMode="cover"
           style={styles.movieDetailsCover}
@@ -41,22 +42,27 @@ export const MovieDetailsScreen = (props)=>{
         <Text style={styles.movieDetailsOverview}>{overview}</Text>
 
         <Button
-          buttonStyle={{ width: 150, backgroundColor: 'red' }}
-          containerStyle={{ margin: 50 }}
-          disabledStyle={{
-            borderWidth: 2,
-            borderColor: "#00F"
-          }}
-          disabledTitleStyle={{ color: "#00F" }}
-          linearGradientProps={null}
-          icon={<Icon name="react" size={15} color="#0FF" />}
-          iconContainerStyle={{ background: "#000" }}
-          loadingProps={{ animating: true }}
-          onPress={() => alert("click")}
-          title="Add To Favorites"
-          titleStyle={{ marginHorizontal: 5 }}
-        />
-    </View>
+        
+        containerStyle={{ margin: 5 }}
+        disabledStyle={{
+          borderWidth: 2,
+          borderColor: "#ffb049"
+        }}
+        disabledTitleStyle={{ color: "#00F" }}
+        linearGradientProps={null}
+        icon={
+          <Icon name="bells" type="antdesign" size={25} color="#ffb049" />
+        }
+        iconContainerStyle={{ background: "#000" }}
+        loadingStyle={{}}
+        onPress={() => alert("click")}
+        title="Add To Favorits"
+        titleProps={{}}
+        titleStyle={{ marginHorizontal: 5, color:"#ffb049" }}
+        // type="outline"
+      />
+        
+    </ScrollView>
   )
 }
 
@@ -90,7 +96,7 @@ const styles = StyleSheet.create({
     color:'white'
   },
   movieDetailsSTitle:{
-    fontSize:24,
+    fontSize:32,
     fontWeight:'normal',
     textAlign:'center',
     marginTop:55,

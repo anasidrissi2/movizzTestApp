@@ -1,5 +1,5 @@
 import React, { useState }  from "react";
-import { FlatList, Button, Text, TouchableOpacity, StyleSheet } from "react-native";
+import { FlatList, Button, Text, TouchableOpacity, StyleSheet, View, ScrollView } from "react-native";
 import theMovieDb from "../../helpers/themoviedb-lib/themoviedb";
 import { MovieItem } from "../components/MovieItem";
 
@@ -36,30 +36,61 @@ const MoviesListScreen = ({navigation})=>{
   }
 
   if(moviesData.error){
-    return (<Button title="Couldn't retreive data Reload ?"  onPress={()=>getMovies() } />)
+    return (
+    <View style={styles.errorContainer}>
+      <Text>Error getting data please check your internet connection</Text>
+        <Text>{moviesData.errorData}</Text>
+      </View>)
   }
   if(moviesData.movies.length===0){
-    return (<Button title="Movies List" onPress={()=>getMovies()} />)
+    return (
+      <View style={styles.buttonContainer}>
+        <Text style={{color:'white', fontSize:18, textAlign:'center',
+      marginBottom:50, color:'gray'}}>Click to show most popular movies</Text>
+        <Button color='#ed1c24' style={styles.moviesDetailsButton} title="Movies List" onPress={()=>getMovies()} />
+      </View>
+    )
   }
   return (
-    <FlatList
-      style={styles.movieListContainer}
-      data={moviesData.movies}
-      renderItem={(movie) => (
-        // <Text>hello</Text>
-        <TouchableOpacity onPress={()=>navigation.navigate('MovieDetails',{movieData:movie})}>
-          <MovieItem movieData={movie} />
-        </TouchableOpacity>
-      )}
-      numColumns={3}
-      keyExtractor={(item, index) => index.toString()}
-    />
+    <View style={styles.movieListContainer}>
+      <Text style={styles.screenTitle}>Popular movies </Text>
+      <FlatList
+        data={moviesData.movies}
+        renderItem={(movie) => (
+          // <Text>hello</Text>
+          <TouchableOpacity onPress={()=>navigation.navigate('MovieDetails',{movieData:movie})}>
+            <MovieItem movieData={movie} />
+          </TouchableOpacity>
+        )}
+        numColumns={3}
+        keyExtractor={(item, index) => index.toString()}
+      />
+    </View>
   )
 }
 const styles =StyleSheet.create({
+  screenTitle:{
+    color:'#ed1c24',
+    fontSize:24,
+    padding:10,
+    fontWeight:'bold',
+    borderColor:'rgba(52, 52, 52, 1)'
+  },
   movieListContainer:{
     backgroundColor:'#05131e',
-    paddingTop:50
-  }
+    paddingBottom:25
+  },
+  buttonContainer:{
+    display:"flex",
+    flex:1,
+    justifyContent:'center',
+    backgroundColor:'#05131e',
+    padding:50
+  },
+  moviesDetailsButton:{
+    backgroundColor:'red',
+    borderRadius:10
+  },
+  
 })
 export default MoviesListScreen;
