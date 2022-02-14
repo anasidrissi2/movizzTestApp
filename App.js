@@ -7,106 +7,64 @@
  */
 
 import React from 'react';
-import type {Node} from 'react';
-import {
-  SafeAreaView,
-  ScrollView,
-  StatusBar,
-  StyleSheet,
-  Text,
-  useColorScheme,
-  View,
-} from 'react-native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { AuthenticationScreen } from './app/screens/Authentication';
+import MoviesListScreen from './app/screens/MoviesList';
+import { NavigationContainer } from '@react-navigation/native';
+import { MovieDetailsScreen } from './app/screens/MovieDetails';
+import { Provider, useSelector } from 'react-redux';
+import store from './app/redux/store';
+import { Icon } from 'react-native-elements';
+import { Text, TouchableOpacity, View } from 'react-native';
 
-import {
-  Colors,
-  DebugInstructions,
-  Header,
-  LearnMoreLinks,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
 
-const Section = ({children, title}): Node => {
-  const isDarkMode = useColorScheme() === 'dark';
-  return (
-    <View style={styles.sectionContainer}>
-      <Text
-        style={[
-          styles.sectionTitle,
-          {
-            color: isDarkMode ? Colors.white : Colors.black,
-          },
-        ]}>
-        {title}
-      </Text>
-      <Text
-        style={[
-          styles.sectionDescription,
-          {
-            color: isDarkMode ? Colors.light : Colors.dark,
-          },
-        ]}>
-        {children}
-      </Text>
-    </View>
-  );
-};
 
-const App: () => Node = () => {
-  const isDarkMode = useColorScheme() === 'dark';
-
-  const backgroundStyle = {
-    backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
-  };
+const Stack = createNativeStackNavigator();
+const HeaderTitle = (props)=>{
+const favorites = useSelector(state => state);
 
   return (
-    <SafeAreaView style={backgroundStyle}>
-      <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
-      <ScrollView
-        contentInsetAdjustmentBehavior="automatic"
-        style={backgroundStyle}>
-        <Header />
-        <View
-          style={{
-            backgroundColor: isDarkMode ? Colors.black : Colors.white,
-          }}>
-          <Section title="Step One">
-            Edit <Text style={styles.highlight}>App.js</Text> to change this
-            screen and then come back to see your edits.
-          </Section>
-          <Section title="See Your Changes">
-            <ReloadInstructions />
-          </Section>
-          <Section title="Debug">
-            <DebugInstructions />
-          </Section>
-          <Section title="Learn More">
-            Read the docs to discover what to do next:
-          </Section>
-          <LearnMoreLinks />
+    
+      <View style={{display:'flex',flexDirection:'row', flex:2, alignItems:'center'}}>
+        <Text style={{color:'white', fontSize:24}}>List of movies</Text>
+        <TouchableOpacity>
+        <View style={{display:'flex', flexDirection:'row', marginLeft:150, padding:10}}>
+          <Icon name="bells" type="antdesign" size={25} color="#ffb049"  />
+          <Text style={{color:'#ffb049', fontSize:18, fontWeight:'bold', marginLeft:5}}>{favorites.count}</Text>
         </View>
-      </ScrollView>
-    </SafeAreaView>
+        </TouchableOpacity>
+      </View>
+  )
+}
+function App() {
+  return (
+    <Provider store={store}>
+    <NavigationContainer>
+      <Stack.Navigator>
+        <Stack.Screen options={{headerShown:false}} name="Login" component={AuthenticationScreen} />
+        <Stack.Screen options={{
+          headerShown:true,
+          title:'Popular Movies',
+          headerTransparent:true,
+          headerStyle:{
+            backgroundColor:'#05131e'
+          },
+          headerTitleStyle:{
+            color:'white'
+          },
+          headerBackVisible:false,
+          headerTitle:()=>(<HeaderTitle></HeaderTitle>)
+            
+        }} 
+        name="Movies" component={MoviesListScreen} />
+        <Stack.Screen options={{
+          headerShown:false,
+            
+        }} name="MovieDetails" component={MovieDetailsScreen} />
+      </Stack.Navigator>
+    </NavigationContainer>
+    </Provider>
   );
-};
-
-const styles = StyleSheet.create({
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
-  },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
-  },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
-  },
-  highlight: {
-    fontWeight: '700',
-  },
-});
+}
 
 export default App;
